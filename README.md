@@ -4,6 +4,8 @@ Isosplit is a non-parametric clustering method that does not require adjustable 
 
 Motivation: Many clustering algorithms require the tuning of parameters for each application or dataset, making them unsuitable for automated procedures that involve clustering. Some techniques require an initial estimate of the number of clusters, while density-based techniques typically require a scale parameter. Other parametric methods, such as mixture modeling, make assumptions about the underlying cluster distributions.
 
+Isosplit is used by the [MountainSort](https://github.com/magland/mountainsort5) spike sorting algorithm.
+
 # Installation and usage
 
 ```bash
