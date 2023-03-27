@@ -1,0 +1,8 @@
+projectName: isosplit6
+pythonProjectVersion: 0.1.0
+projectAuthor: Jeremy Magland
+projectAuthorEmail: jmagland@flatironinstitute.org
+projectDescription:
+projectUrl: https://github.com/magland/isosplit6
+projectBugTrackerUrl: https://github.com/magland/isosplit6/issues
+pythonPackageDir: .
