@@ -867,7 +867,7 @@ void get_pairs_to_compare(std::vector<bigint>* inds1, std::vector<bigint>* inds2
 {
     inds1->clear();
     inds2->clear();
-    std::vector<std::vector<double>> dists(K);
+    std::vector<std::vector<double> > dists(K);
     for (bigint k1 = 0; k1 < K; k1++) {
         dists[k1].resize(K);
         for (bigint k2 = 0; k2 < K; k2++) {
@@ -1160,7 +1160,7 @@ void compare_pairs(std::vector<bigint>* clusters_changed, bigint* total_num_labe
 void get_pairs_to_compare3(std::vector<bigint>* i1s, std::vector<bigint>* i2s, bigint M, bigint N, double* centroids)
 {
     std::vector<bigint> used(N, 0);   
-    std::vector<std::vector<double>> distances(N);
+    std::vector<std::vector<double> > distances(N);
     for (bigint i = 0; i < N; i++) {
         distances[i].resize(N);
         for (bigint j = i; j < N; j++) {

@@ -23,10 +23,10 @@ struct isosplit6_opts {
     double isocut_threshold = 2.0;
     int min_cluster_size = 10;
     int K_init = 200;
-    bool refine_clusters = false;
+    // bool refine_clusters = false;
     int max_iterations_per_pass = 500;
 };
 
-bool isosplit6(int* labels_out, bigint M, bigint N, double* X, isosplit6_opts opts);
+bool isosplit6(int* labels_out, bigint M, bigint N, double* X, int32_t *initial_labels, isosplit6_opts opts);
  
 #endif // ISOSPLIT6_H

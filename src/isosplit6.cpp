@@ -26,20 +26,27 @@ namespace ns_isosplit6 {
 void compare_pairs(std::vector<bigint>* clusters_changed, bigint* total_num_label_changes, bigint M, bigint N, double* X, int* labels, const std::vector<bigint>& inds1, const std::vector<bigint>& inds2, const isosplit6_opts& opts, double* centroids, double* covmats); //the labels are updated
 }
 
-bool isosplit6(int* labels, bigint M, bigint N, double* X, isosplit6_opts opts)
+bool isosplit6(int* labels, bigint M, bigint N, double* X, int32_t *initial_labels, isosplit6_opts opts)
 {
-    // compute the initial clusters
-    bigint target_parcel_size = opts.min_cluster_size;
-    bigint target_num_parcels = opts.K_init;
-    // !! important not to do a final reassign because then the shapes will not be conducive to isosplit iterations -- hexagons are not good for isosplit!
-    parcelate2_opts p2opts;
-    p2opts.final_reassign = false;
-    if (!parcelate2(labels, M, N, X, target_parcel_size, target_num_parcels, p2opts)) {
-        for (bigint i=0; i<N; i++) {
-            labels[i]=-1;
+    if (initial_labels[0] == 0) {
+        // compute the initial clusters
+        bigint target_parcel_size = opts.min_cluster_size;
+        bigint target_num_parcels = opts.K_init;
+        // !! important not to do a final reassign because then the shapes will not be conducive to isosplit iterations -- hexagons are not good for isosplit!
+        parcelate2_opts p2opts;
+        p2opts.final_reassign = false;
+        if (!parcelate2(labels, M, N, X, target_parcel_size, target_num_parcels, p2opts)) {
+            for (bigint i=0; i<N; i++) {
+                labels[i]=-1;
+            }
+            printf("Failure in parcelate2.\n");
+            return false;
         }
-        printf("Failure in parcelate2.\n");
-        return false;
+    }
+    else {
+        for (bigint i = 0; i < N; i++) {
+            labels[i] = initial_labels[i];
+        }
     }
     int Kmax = ns_isosplit5::compute_max(N, labels);
 
@@ -184,37 +191,37 @@ bool isosplit6(int* labels, bigint M, bigint N, double* X, isosplit6_opts opts)
     // of the new clusters, recursively. Unless we only found only one cluster.
     bigint K = ns_isosplit5::compute_max(N, labels);
 
-    if ((opts.refine_clusters) && (K > 1)) {
-        int* labels_split = (int*)malloc(sizeof(int) * N);
-        isosplit6_opts opts2 = opts;
-        opts2.refine_clusters = true; // Maybe we should provide an option on whether to do recursive refinement
-        bigint k_offset = 0;
-        for (bigint k = 1; k <= K; k++) {
-            std::vector<bigint> inds_k;
-            for (bigint i = 0; i < N; i++)
-                if (labels[i] == k)
-                    inds_k.push_back(i);
-            if (inds_k.size() > 0) {
-                double* X_k = (double*)malloc(sizeof(double) * M * inds_k.size()); //Warning: this may cause memory problems -- especially for recursive case
-                int* labels_k = (int*)malloc(sizeof(int) * inds_k.size());
-                for (bigint i = 0; i < (bigint)inds_k.size(); i++) {
-                    for (bigint m = 0; m < M; m++) {
-                        X_k[m + M * i] = X[m + M * inds_k[i]];
-                    }
-                }
-                isosplit6(labels_k, M, inds_k.size(), X_k, opts2);
-                for (bigint i = 0; i < (bigint)inds_k.size(); i++) {
-                    labels_split[inds_k[i]] = k_offset + labels_k[i];
-                }
-                k_offset += ns_isosplit5::compute_max(inds_k.size(), labels_k);
-                free(labels_k);
-                free(X_k);
-            }
-        }
-        for (bigint i = 0; i < N; i++)
-            labels[i] = labels_split[i];
-        free(labels_split);
-    }
+    // if ((opts.refine_clusters) && (K > 1)) {
+    //     int* labels_split = (int*)malloc(sizeof(int) * N);
+    //     isosplit6_opts opts2 = opts;
+    //     opts2.refine_clusters = true; // Maybe we should provide an option on whether to do recursive refinement
+    //     bigint k_offset = 0;
+    //     for (bigint k = 1; k <= K; k++) {
+    //         std::vector<bigint> inds_k;
+    //         for (bigint i = 0; i < N; i++)
+    //             if (labels[i] == k)
+    //                 inds_k.push_back(i);
+    //         if (inds_k.size() > 0) {
+    //             double* X_k = (double*)malloc(sizeof(double) * M * inds_k.size()); //Warning: this may cause memory problems -- especially for recursive case
+    //             int* labels_k = (int*)malloc(sizeof(int) * inds_k.size());
+    //             for (bigint i = 0; i < (bigint)inds_k.size(); i++) {
+    //                 for (bigint m = 0; m < M; m++) {
+    //                     X_k[m + M * i] = X[m + M * inds_k[i]];
+    //                 }
+    //             }
+    //             isosplit6(labels_k, M, inds_k.size(), X_k, opts2);
+    //             for (bigint i = 0; i < (bigint)inds_k.size(); i++) {
+    //                 labels_split[inds_k[i]] = k_offset + labels_k[i];
+    //             }
+    //             k_offset += ns_isosplit5::compute_max(inds_k.size(), labels_k);
+    //             free(labels_k);
+    //             free(X_k);
+    //         }
+    //     }
+    //     for (bigint i = 0; i < N; i++)
+    //         labels[i] = labels_split[i];
+    //     free(labels_split);
+    // }
 
     free(centroids);
     free(covmats);

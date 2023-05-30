@@ -11,14 +11,15 @@ int add(int i, int j) {
     return i + j;
 }
 
-int isosplit6_fn(py::array_t<int> labels_out, py::array_t<double> X)
+int isosplit6_fn(py::array_t<int> labels_out, py::array_t<double> X, py::array_t<double> initial_labels)
 {
     NDArray<double> Xa(X);
+    NDArray<int32_t> initial_labels_a(labels_out);
     NDArray<int> La(labels_out);
     bigint N = Xa.shape[0];
     bigint M = Xa.shape[1];
     isosplit6_opts opts;
-    isosplit6(La.ptr, M, N, Xa.ptr, opts);
+    isosplit6(La.ptr, M, N, Xa.ptr, initial_labels_a.ptr, opts);
     return 0;
 }
 
