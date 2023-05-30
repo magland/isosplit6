@@ -6,6 +6,8 @@ Motivation: Many clustering algorithms require the tuning of parameters for each
 
 Isosplit is used by the [MountainSort](https://github.com/magland/mountainsort5) spike sorting algorithm.
 
+[preprint](https://arxiv.org/abs/1508.04841)
+
 # Installation and usage
 
 ```bash
@@ -16,8 +18,8 @@ pip install isosplit6
 from isosplit6 import isosplit6
 
 # Prepare a N x M Numpy Array
-# N = number of features
-# M = number of dimensions
+# N = number of observations
+# M = number of features
 features = ...
 
 cluster_labels = isosplit6(features)
