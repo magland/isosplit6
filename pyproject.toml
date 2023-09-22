@@ -5,6 +5,13 @@ requires = [
 ]
 build-backend = "setuptools.build_meta"
 
+[pyproject.optional-dependencies]
+dev = [
+    "numpy",  # required for tests
+    "pytest",
+    "ruff",
+]
+
 [tool.ruff]
 extend-select = [
   "B",   # flake8-bugbear
@@ -17,3 +24,9 @@ extend-ignore = [
   "E501",   # Line too long
 ]
 target-version = "py37"
+
+[tool.cibuildwheel]
+build = "cp37-* cp38-* cp39-* cp310-* cp311-*"
+
+[tool.cibuildwheel.macos]
+archs = ["x86_64", "arm64"]
