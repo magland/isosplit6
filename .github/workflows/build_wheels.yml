@@ -6,9 +6,12 @@ jobs:
   build_wheels:
     name: Build wheels on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
+    env:
+      MACOSX_DEPLOYMENT_TARGET: "10.9"
+      CFLAGS: "-std=c++11"
     strategy:
       matrix:
-        os: [ubuntu-20.04, windows-2019] # macos-11 known c++11 build issue
+        os: [macos-11]  # ubuntu-20.04, windows-2019,
 
     steps:
       - uses: actions/checkout@v4
