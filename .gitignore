@@ -1,4 +1,5 @@
 test*
+!isosplit6/tests
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

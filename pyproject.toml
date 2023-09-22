@@ -2,6 +2,8 @@
 requires = [
     "setuptools>=42",
     "pybind11>=2.10.0",
+    "numpy",
+    "pytest",
 ]
 build-backend = "setuptools.build_meta"
 
@@ -19,7 +21,7 @@ extend-ignore = [
 target-version = "py37"
 
 [tool.cibuildwheel]
-build = "cp38-* cp39-* cp310-*"
+build = "cp37-* cp38-* cp39-* cp310-* cp311-*"
 
 [tool.cibuildwheel.macos]
 archs = ["x86_64", "arm64"]
