@@ -17,3 +17,9 @@ extend-ignore = [
   "E501",   # Line too long
 ]
 target-version = "py37"
+
+[tool.cibuildwheel]
+build = "cp38-* cp39-* cp310-*"
+
+[tool.cibuildwheel.macos]
+archs = ["x86_64", "arm64"]
