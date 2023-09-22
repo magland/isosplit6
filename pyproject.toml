@@ -2,10 +2,15 @@
 requires = [
     "setuptools>=42",
     "pybind11>=2.10.0",
-    "numpy",
-    "pytest",
 ]
 build-backend = "setuptools.build_meta"
+
+[pyproject.optional-dependencies]
+dev = [
+    "numpy",  # required for tests
+    "pytest",
+    "ruff",
+]
 
 [tool.ruff]
 extend-select = [
