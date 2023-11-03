@@ -1,6 +1,9 @@
-name: build wheels
+name: build and deploy
 
-on: [push, pull_request]  # TODO: on release with tags
+on:
+  push:
+    tags:
+      - '*'
 
 jobs:
   build_wheels:
@@ -52,6 +55,6 @@ jobs:
         name: artifact
         path: dist
 
-#    - uses: pypa/gh-action-pypi-publish@release/v1
-#      with:
-#        password: ${{ secrets.PYPI_API_TOKEN }}
+    - uses: pypa/gh-action-pypi-publish@release/v1
+      with:
+        password: ${{ secrets.PYPI_API_TOKEN }}
