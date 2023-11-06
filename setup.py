@@ -20,5 +20,7 @@ ext_modules = [
 setup(
     packages=find_packages(),
     ext_modules=ext_modules,
-    install_requires=[]
+    install_requires=[],
+    long_description_content_type="text/markdown",
+    long_description=open("README.md").read(),
 )
