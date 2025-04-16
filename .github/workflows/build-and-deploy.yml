@@ -13,6 +13,7 @@ jobs:
       CFLAGS: "-std=c++11"
       CIBW_TEST_REQUIRES: pytest
       CIBW_TEST_COMMAND: cd {package} && ls
+      CIBW_ONLY:
     strategy:
       matrix:
         os: [ubuntu-20.04, windows-2019, macos-11]
