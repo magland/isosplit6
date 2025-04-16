@@ -242,42 +242,46 @@ double compute_ks5(bigint* critical_range_min, bigint* critical_range_max, bigin
 
     // from the left
     {
-        double* counts1_left = (double*)malloc(sizeof(double) * (peak_index + 1));
-        double* counts2_left = (double*)malloc(sizeof(double) * (peak_index + 1));
-        for (bigint i = 0; i <= peak_index; i++) {
-            counts1_left[i] = counts1[i];
-            counts2_left[i] = counts2[i];
+    double* counts1_left = (double*)malloc(sizeof(double) * (peak_index + 1));
+    double* counts2_left = (double*)malloc(sizeof(double) * (peak_index + 1));
+    for (bigint i = 0; i <= peak_index; i++) {
+        counts1_left[i] = counts1[i];
+        counts2_left[i] = counts2[i];
+    }
+    bigint len = peak_index + 1;
+    while ((len >= 4) || (len == peak_index + 1)) {
+        double ks0 = compute_ks4(len, counts1_left, counts2_left);
+        if (ks0 > ks_best) {
+            *critical_range_min = 0;
+            *critical_range_max = len - 1;
+            ks_best = ks0;
         }
-        bigint len = peak_index + 1;
-        while ((len >= 4) || (len == peak_index + 1)) {
-            double ks0 = compute_ks4(len, counts1_left, counts2_left);
-            if (ks0 > ks_best) {
-                *critical_range_min = 0;
-                *critical_range_max = len - 1;
-                ks_best = ks0;
-            }
-            len = len / 2;
-        }
+        len = len / 2;
+    }
+    free(counts1_left);
+    free(counts2_left);
     }
 
     // from the right
     {
-        double* counts1_right = (double*)malloc(sizeof(double) * (N - peak_index));
-        double* counts2_right = (double*)malloc(sizeof(double) * (N - peak_index));
-        for (bigint i = 0; i < N - peak_index; i++) {
-            counts1_right[i] = counts1[N - 1 - i];
-            counts2_right[i] = counts2[N - 1 - i];
+    double* counts1_right = (double*)malloc(sizeof(double) * (N - peak_index));
+    double* counts2_right = (double*)malloc(sizeof(double) * (N - peak_index));
+    for (bigint i = 0; i < N - peak_index; i++) {
+        counts1_right[i] = counts1[N - 1 - i];
+        counts2_right[i] = counts2[N - 1 - i];
+    }
+    bigint len = N - peak_index;
+    while ((len >= 4) || (len == N - peak_index)) {
+        double ks0 = compute_ks4(len, counts1_right, counts2_right);
+        if (ks0 > ks_best) {
+            *critical_range_min = N - len;
+            *critical_range_max = N - 1;
+            ks_best = ks0;
         }
-        bigint len = N - peak_index;
-        while ((len >= 4) || (len == N - peak_index)) {
-            double ks0 = compute_ks4(len, counts1_right, counts2_right);
-            if (ks0 > ks_best) {
-                *critical_range_min = N - len;
-                *critical_range_max = N - 1;
-                ks_best = ks0;
-            }
-            len = len / 2;
-        }
+        len = len / 2;
+    }
+    free(counts1_right);
+    free(counts2_right);
     }
 
     return ks_best;
