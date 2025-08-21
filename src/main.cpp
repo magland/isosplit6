@@ -68,7 +68,7 @@ PYBIND11_MODULE(isosplit6_cpp, m) {
 
     m.def("isosplit6_fn", &isosplit6_fn, "Isosplit6 clustering C++ implementation.");
 
-    m.def("isocust6_fn", &isocut6_fn, "Isocut6 C++ implementation.");
+    m.def("isocut6_fn", &isocut6_fn, "Isocut6 C++ implementation.");
 
 #ifdef VERSION_INFO
     m.attr("__version__") = MACRO_STRINGIFY(VERSION_INFO);
